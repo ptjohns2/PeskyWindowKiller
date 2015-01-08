@@ -24,7 +24,7 @@
 
 
 ;---------------------------------------------------------
-;Constants
+;Globals
 
 Const $g_config_filename = "PeskyWindowKiller.ini"
 Const $g_config_failedKeyLoadValue = "PeskyWindowKiller_config_failedKeyLoadValue"
@@ -43,23 +43,20 @@ Global $g_affectedWindowNameSubstrings[2] = [1, "testwindowname"]
 
 Global $g_main_busyLoopSleep_delayMsec = 100
 
+Global $g_affectedWindowHandleList[1] = [0]
 
-;---------------------------------------------------------
-;Globals
-
-Global $windowHandleList[1] = [0]
 
 
 ;---------------------------------------------------------
 ;Helper functions
 
-Func windowHandleList_clear()
-	ReDim $windowHandleList[1]
-	$windowHandleList[0] = 0
-EndFunc   ;==>windowHandleList_clear
+Func affectedWindowHandleList_clear()
+	ReDim $g_affectedWindowHandleList[1]
+	$g_affectedWindowHandleList[0] = 0
+EndFunc   ;==>affectedWindowHandleList_clear
 
-Func windowHandleList_update()
-	windowHandleList_clear()
+Func affectedWindowHandleList_update()
+	affectedWindowHandleList_clear()
 	$windowList = WinList()
 	For $windowNumber = 1 To $windowList[0][0]
 		$windowIsAffected = False
@@ -70,21 +67,21 @@ Func windowHandleList_update()
 			EndIf
 		Next
 		If $windowIsAffected Then
-			_ArrayAdd($windowHandleList, $windowList[$windowNumber][1])
-			$windowHandleList[0] = $windowHandleList[0] + 1
+			_ArrayAdd($g_affectedWindowHandleList, $windowList[$windowNumber][1])
+			$g_affectedWindowHandleList[0] = $g_affectedWindowHandleList[0] + 1
 		EndIf
 	Next
-EndFunc   ;==>windowHandleList_update
+EndFunc   ;==>affectedWindowHandleList_update
 
-Func windowHandleList_hasWindows()
-	Return $windowHandleList[0] <> 0
-EndFunc   ;==>windowHandleList_hasWindows
+Func affectedWindowHandleList_hasWindows()
+	Return $g_affectedWindowHandleList[0] <> 0
+EndFunc   ;==>affectedWindowHandleList_hasWindows
 
-Func windowHandleList_kill()
-	For $i = 1 To $windowHandleList[0]
-		WinKill($windowHandleList[$i])
+Func affectedWindowHandleList_kill()
+	For $i = 1 To $g_affectedWindowHandleList[0]
+		WinKill($g_affectedWindowHandleList[$i])
 	Next
-EndFunc   ;==>windowHandleList_kill
+EndFunc   ;==>affectedWindowHandleList_kill
 
 
 
@@ -98,10 +95,10 @@ Func attemptNotificationWindow()
 EndFunc   ;==>attemptNotificationWindow
 
 Func main_callback()
-	windowHandleList_update()
-	If windowHandleList_hasWindows() Then
+	affectedWindowHandleList_update()
+	If affectedWindowHandleList_hasWindows() Then
 		attemptNotificationWindow()
-		windowHandleList_kill()
+		affectedWindowHandleList_kill()
 	EndIf
 EndFunc   ;==>main_callback
 
@@ -169,7 +166,7 @@ Func attemptLoadConfigFile()
 EndFunc   ;==>attemptLoadConfigFile
 
 Func init()
-	windowHandleList_update()
+	affectedWindowHandleList_update()
 
 	hotkeyMode_init()
 	interruptMode_init()

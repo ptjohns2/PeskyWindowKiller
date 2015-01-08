@@ -24,12 +24,12 @@ Const $hotkeyMode_character = "["
 
 
 Const $interruptMode_enabled = False
-Const $interruptMode_delaySec = 5
+Const $interruptMode_delayMsec = 5 * 1000
 
-Const $interruptMode_notificationWindow_enabled = False
-Const $interruptMode_notificationWindowTitle = "Interrupt mode notification window title"
-Const $interruptMode_notificationWindowMessage = "Interrupt mode notification window message"
 
+Const $notificationWindow_enabled = False
+Const $notificationWindow_title = "Notification window title"
+Const $notificationWindow_message = "Notification window message"
 
 Const $affectedWindowNameSubstrings[2] = [1, "testwindowname"]
 
@@ -83,26 +83,31 @@ EndFunc   ;==>windowHandleList_kill
 ;Main functions
 
 ;Hotkey mode
-Func hotkeyMode_init()
-
-EndFunc   ;==>hotkeyMode_init
-
 Func hotkeyMode_callback()
 
 EndFunc   ;==>hotkeyMode_callback
 
+Func hotkeyMode_init()
+	If $hotkeyMode_enabled Then
+		HotKeySet($hotkeyMode_character, hotkeymode_callback)
+	EndIf
+EndFunc   ;==>hotkeyMode_init
+
+
 ;Interrupt mode
+Func interruptMode_callback()
+	If $interruptMode_enabled Then
+		AdlibRegister(interruptMode_callback, $interruptMode_delayMsec)
+	EndIf
+EndFunc   ;==>interruptMode_callback
+
 Func interruptMode_init()
 
 EndFunc   ;==>interruptMode_init
 
-Func interruptMode_callback()
-
-EndFunc   ;==>interruptMode_callback
 
 ;Main
 Func init()
-	windowHandleList_clear()
 	windowHandleList_update()
 
 	hotkeyMode_init()
@@ -116,7 +121,12 @@ Func main()
 
 EndFunc   ;==>main
 
+
+;---------------------------------------------------------
+;Entry point
 main()
+
+
 
 
 

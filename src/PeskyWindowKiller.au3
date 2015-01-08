@@ -1,4 +1,4 @@
-#Region ;**** Directives created by AutoIt3Wrapper_GUI ****
+#region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Outfile=..\bin\PeskyWindowKiller_x86.exe
 #AutoIt3Wrapper_Outfile_x64=..\bin\PeskyWindowKiller_x64.exe
 #AutoIt3Wrapper_UseUpx=n
@@ -7,7 +7,7 @@
 #AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Language=1033
 #AutoIt3Wrapper_Run_AU3Check=n
-#EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
+#endregion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
 
 ;---------------------------------------------------------
@@ -26,19 +26,22 @@
 ;---------------------------------------------------------
 ;Constants
 
-Const $hotkeyMode_enabled = true
-Const $hotkeyMode_character = "["
+Const $config_filename = "PeskyWindowKiller.ini"
+Const $config_failedKeyLoadValue = "PeskyWindowKiller_config_failedKeyLoadValue"
 
-Const $interruptMode_enabled = False
-Const $interruptMode_delayMsec = 5 * 1000
+Global $hotkeyMode_enabled = True
+Global $hotkeyMode_character = "["
 
-Const $notificationWindow_enabled = false
-Const $notificationWindow_title = "Notification window title"
-Const $notificationWindow_message = "Notification window message"
+Global $interruptMode_enabled = False
+Global $interruptMode_delayMsec = 5000
 
-Const $affectedWindowNameSubstrings[2] = [1, "testwindowname"]
+Global $notificationWindow_enabled = False
+Global $notificationWindow_title = "Notification window title"
+Global $notificationWindow_message = "Notification window message"
 
-Const $main_infiniteLoopSleep_delayMsec = 100
+Global $affectedWindowNameSubstrings[2] = [1, "testwindowname"]
+
+Global $main_busyLoopSleep_delayMsec = 100
 
 
 ;---------------------------------------------------------
@@ -86,7 +89,7 @@ EndFunc   ;==>windowHandleList_kill
 
 
 ;---------------------------------------------------------
-;Main functions
+;Mode functions
 
 Func attemptNotificationWindow()
 	If $notificationWindow_enabled Then
@@ -127,7 +130,40 @@ Func interruptMode_init()
 EndFunc   ;==>interruptMode_init
 
 
-;Main
+
+;---------------------------------------------------------
+;Main init
+
+Func StrToBool($pStr)
+	Return (StringLower($pStr) == "true") ? True : False
+EndFunc   ;==>StrToBool
+
+Const $attemptSetConfigValue_readModificationMode_str = 0
+Const $attemptSetConfigValue_readModificationMode_int = 1
+Const $attemptSetConfigValue_readModificationMode_bool = 2
+
+Func attemptSetConfigValue(ByRef $rpGlobal, $pSectionName, $pKeyName, $pReadMofificationMode)
+	$tmp = IniRead($config_filename, $pSectionName, $pKeyName, $config_failedKeyLoadValue)
+	If $tmp <> $config_failedKeyLoadValue Then
+		Switch $pReadMofificationMode
+			Case $attemptSetConfigValue_readModificationMode_str
+				$rpGlobal = $tmp
+			Case $attemptSetConfigValue_readModificationMode_int
+				$rpGlobal = Int($tmp)
+			Case $attemptSetConfigValue_readModificationMode_bool
+				$rpGlobal = StrToBool($tmp)
+		EndSwitch
+	EndIf
+EndFunc   ;==>attemptSetConfigValue
+
+
+Func attemptLoadConfig()
+	If FileExists($config_filename) Then
+		;attemptSetConfigValue for each global in $g_config_filename
+
+	EndIf
+EndFunc   ;==>attemptLoadConfig
+
 Func init()
 	windowHandleList_update()
 
@@ -135,11 +171,16 @@ Func init()
 	interruptMode_init()
 EndFunc   ;==>init
 
+
+
+;---------------------------------------------------------
+;Main
+
 Func main()
 	init()
 	While 1
 		;Do nothing but sleep, infinite busy loop
-		Sleep($main_infiniteLoopSleep_delayMsec)
+		Sleep($main_busyLoopSleep_delayMsec)
 	WEnd
 EndFunc   ;==>main
 
@@ -147,6 +188,8 @@ EndFunc   ;==>main
 ;---------------------------------------------------------
 ;Entry point
 main()
+
+
 
 
 

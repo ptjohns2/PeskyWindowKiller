@@ -135,14 +135,18 @@ EndFunc   ;==>interruptMode_init
 ;Main init
 
 Func StrToBool($pStr)
-	Return (StringLower($pStr) == "true") ? True : False
+	If StringLower($pStr) == "true" Then
+		Return True
+	Else
+		Return False
+	EndIf
 EndFunc   ;==>StrToBool
 
 Const $attemptSetConfigValue_readModificationMode_str = 0
 Const $attemptSetConfigValue_readModificationMode_int = 1
 Const $attemptSetConfigValue_readModificationMode_bool = 2
 
-Func attemptSetConfigValue(ByRef $rpGlobal, $pSectionName, $pKeyName, $pReadMofificationMode)
+Func attemptLoadConfigValue(ByRef $rpGlobal, $pSectionName, $pKeyName, $pReadMofificationMode)
 	$tmp = IniRead($config_filename, $pSectionName, $pKeyName, $config_failedKeyLoadValue)
 	If $tmp <> $config_failedKeyLoadValue Then
 		Switch $pReadMofificationMode
@@ -157,7 +161,7 @@ Func attemptSetConfigValue(ByRef $rpGlobal, $pSectionName, $pKeyName, $pReadMofi
 EndFunc   ;==>attemptSetConfigValue
 
 
-Func attemptLoadConfig()
+Func attemptLoadConfigFile()
 	If FileExists($config_filename) Then
 		;attemptSetConfigValue for each global in $g_config_filename
 

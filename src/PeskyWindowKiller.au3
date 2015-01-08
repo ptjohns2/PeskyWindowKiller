@@ -33,7 +33,7 @@ Const $notificationWindow_message = "Notification window message"
 
 Const $affectedWindowNameSubstrings[2] = [1, "testwindowname"]
 
-Const $main_infiniteLoopSleepDelayMsec = 100
+Const $main_infiniteLoopSleep_delayMsec = 100
 
 
 ;---------------------------------------------------------
@@ -134,7 +134,7 @@ Func main()
 	init()
 	While 1
 		;Do nothing but sleep, infinite busy loop
-		Sleep($main_infiniteLoopSleepDelayMsec)
+		Sleep($main_infiniteLoopSleep_delayMsec)
 	WEnd
 EndFunc   ;==>main
 

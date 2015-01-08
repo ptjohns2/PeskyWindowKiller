@@ -26,22 +26,22 @@
 ;---------------------------------------------------------
 ;Constants
 
-Const $config_filename = "PeskyWindowKiller.ini"
-Const $config_failedKeyLoadValue = "PeskyWindowKiller_config_failedKeyLoadValue"
+Const $g_config_filename = "PeskyWindowKiller.ini"
+Const $g_config_failedKeyLoadValue = "PeskyWindowKiller_config_failedKeyLoadValue"
 
-Global $hotkeyMode_enabled = True
-Global $hotkeyMode_character = "["
+Global $g_hotkeyMode_enabled = True
+Global $g_hotkeyMode_character = "["
 
-Global $interruptMode_enabled = False
-Global $interruptMode_delayMsec = 5000
+Global $g_interruptMode_enabled = False
+Global $g_interruptMode_delayMsec = 5000
 
-Global $notificationWindow_enabled = False
-Global $notificationWindow_title = "Notification window title"
-Global $notificationWindow_message = "Notification window message"
+Global $g_notificationWindow_enabled = False
+Global $g_notificationWindow_title = "Notification window title"
+Global $g_notificationWindow_message = "Notification window message"
 
-Global $affectedWindowNameSubstrings[2] = [1, "testwindowname"]
+Global $g_affectedWindowNameSubstrings[2] = [1, "testwindowname"]
 
-Global $main_busyLoopSleep_delayMsec = 100
+Global $g_main_busyLoopSleep_delayMsec = 100
 
 
 ;---------------------------------------------------------
@@ -63,8 +63,8 @@ Func windowHandleList_update()
 	$windowList = WinList()
 	For $windowNumber = 1 To $windowList[0][0]
 		$windowIsAffected = False
-		For $substringNumber = 1 To $affectedWindowNameSubstrings[0]
-			If StringInStr($windowList[$windowNumber][0], $affectedWindowNameSubstrings[$substringNumber]) <> 0 Then
+		For $substringNumber = 1 To $g_affectedWindowNameSubstrings[0]
+			If StringInStr($windowList[$windowNumber][0], $g_affectedWindowNameSubstrings[$substringNumber]) <> 0 Then
 				$windowIsAffected = True
 				ExitLoop
 			EndIf
@@ -92,8 +92,8 @@ EndFunc   ;==>windowHandleList_kill
 ;Mode functions
 
 Func attemptNotificationWindow()
-	If $notificationWindow_enabled Then
-		MsgBox(0, $notificationWindow_title, $notificationWindow_message)
+	If $g_notificationWindow_enabled Then
+		MsgBox(0, $g_notificationWindow_title, $g_notificationWindow_message)
 	EndIf
 EndFunc   ;==>attemptNotificationWindow
 
@@ -112,8 +112,8 @@ Func hotkeyMode_callback()
 EndFunc   ;==>hotkeyMode_callback
 
 Func hotkeyMode_init()
-	If $hotkeyMode_enabled Then
-		HotKeySet($hotkeyMode_character, "hotkeyMode_callback")
+	If $g_hotkeyMode_enabled Then
+		HotKeySet($g_hotkeyMode_character, "hotkeyMode_callback")
 	EndIf
 EndFunc   ;==>hotkeyMode_init
 
@@ -124,8 +124,8 @@ Func interruptMode_callback()
 EndFunc   ;==>interruptMode_callback
 
 Func interruptMode_init()
-	If $interruptMode_enabled Then
-		AdlibRegister("interruptMode_callback", $interruptMode_delayMsec)
+	If $g_interruptMode_enabled Then
+		AdlibRegister("interruptMode_callback", $g_interruptMode_delayMsec)
 	EndIf
 EndFunc   ;==>interruptMode_init
 
@@ -147,8 +147,8 @@ Const $attemptSetConfigValue_readModificationMode_int = 1
 Const $attemptSetConfigValue_readModificationMode_bool = 2
 
 Func attemptLoadConfigValue(ByRef $rpGlobal, $pSectionName, $pKeyName, $pReadMofificationMode)
-	$tmp = IniRead($config_filename, $pSectionName, $pKeyName, $config_failedKeyLoadValue)
-	If $tmp <> $config_failedKeyLoadValue Then
+	$tmp = IniRead($g_config_filename, $pSectionName, $pKeyName, $g_config_failedKeyLoadValue)
+	If $tmp <> $g_config_failedKeyLoadValue Then
 		Switch $pReadMofificationMode
 			Case $attemptSetConfigValue_readModificationMode_str
 				$rpGlobal = $tmp
@@ -158,15 +158,15 @@ Func attemptLoadConfigValue(ByRef $rpGlobal, $pSectionName, $pKeyName, $pReadMof
 				$rpGlobal = StrToBool($tmp)
 		EndSwitch
 	EndIf
-EndFunc   ;==>attemptSetConfigValue
+EndFunc   ;==>attemptLoadConfigValue
 
 
 Func attemptLoadConfigFile()
-	If FileExists($config_filename) Then
+	If FileExists($g_config_filename) Then
 		;attemptSetConfigValue for each global in $g_config_filename
 
 	EndIf
-EndFunc   ;==>attemptLoadConfig
+EndFunc   ;==>attemptLoadConfigFile
 
 Func init()
 	windowHandleList_update()
@@ -184,7 +184,7 @@ Func main()
 	init()
 	While 1
 		;Do nothing but sleep, infinite busy loop
-		Sleep($main_busyLoopSleep_delayMsec)
+		Sleep($g_main_busyLoopSleep_delayMsec)
 	WEnd
 EndFunc   ;==>main
 

@@ -13,7 +13,7 @@
 ;---------------------------------------------------------
 ;Build option directives
 
-;#NoTrayIcon
+#NoTrayIcon
 
 
 ;---------------------------------------------------------
@@ -103,8 +103,8 @@ EndFunc   ;==>attemptNotificationWindow
 Func main_callback()
 	affectedWindowHandleList_update()
 	If affectedWindowHandleList_hasWindows() Then
-		attemptNotificationWindow()
 		affectedWindowHandleList_kill()
+		attemptNotificationWindow()
 	EndIf
 EndFunc   ;==>main_callback
 

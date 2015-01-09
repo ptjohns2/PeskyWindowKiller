@@ -1,19 +1,18 @@
-#region ;**** Directives created by AutoIt3Wrapper_GUI ****
+#NoTrayIcon
+#Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Outfile=..\bin\PeskyWindowKiller_x86.exe
 #AutoIt3Wrapper_Outfile_x64=..\bin\PeskyWindowKiller_x64.exe
 #AutoIt3Wrapper_UseUpx=n
 #AutoIt3Wrapper_Compile_Both=y
 #AutoIt3Wrapper_UseX64=y
-#AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Language=1033
 #AutoIt3Wrapper_Run_AU3Check=n
-#endregion ;**** Directives created by AutoIt3Wrapper_GUI ****
+#EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
 
 ;---------------------------------------------------------
 ;Build option directives
 
-#NoTrayIcon
 
 
 ;---------------------------------------------------------

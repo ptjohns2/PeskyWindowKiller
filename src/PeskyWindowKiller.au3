@@ -1,5 +1,5 @@
 #NoTrayIcon
-#Region ;**** Directives created by AutoIt3Wrapper_GUI ****
+#region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Outfile=..\bin\PeskyWindowKiller_x86.exe
 #AutoIt3Wrapper_Outfile_x64=..\bin\PeskyWindowKiller_x64.exe
 #AutoIt3Wrapper_UseUpx=n
@@ -7,12 +7,13 @@
 #AutoIt3Wrapper_UseX64=y
 #AutoIt3Wrapper_Res_Language=1033
 #AutoIt3Wrapper_Run_AU3Check=n
-#EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
+#endregion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
 
 ;---------------------------------------------------------
 ;Build option directives
 
+#NoTrayIcon
 
 
 ;---------------------------------------------------------
@@ -33,7 +34,7 @@ Global $hotkeyMode_enabled = True
 Global $hotkeyMode_character = "["
 
 Global $interruptMode_enabled = False
-Global $interruptMode_delayMsec = 5000
+Global $interruptMode_delayMsec = 1000
 
 Global $notificationWindow_enabled = False
 Global $notificationWindow_title = "Notification window title"
@@ -41,7 +42,7 @@ Global $notificationWindow_message = "Notification window message"
 
 Global $main_busyLoopSleep_delayMsec = 100
 
-Global $affectedWindowNameSubstrings[2] = [1, "testwindowname"]
+Global $affectedWindowNameSubstrings[1] = [0]
 
 
 
@@ -106,32 +107,6 @@ Func main_callback()
 		attemptNotificationWindow()
 	EndIf
 EndFunc   ;==>main_callback
-
-
-;Hotkey mode
-Func hotkeyMode_callback()
-	main_callback()
-EndFunc   ;==>hotkeyMode_callback
-
-Func hotkeyMode_init()
-	If $hotkeyMode_enabled Then
-		HotKeySet($hotkeyMode_character, "hotkeyMode_callback")
-	EndIf
-EndFunc   ;==>hotkeyMode_init
-
-
-;Interrupt mode
-Func interruptMode_callback()
-	main_callback()
-EndFunc   ;==>interruptMode_callback
-
-Func interruptMode_init()
-	If $interruptMode_enabled Then
-		AdlibRegister("interruptMode_callback", $interruptMode_delayMsec)
-	EndIf
-EndFunc   ;==>interruptMode_init
-
-
 
 ;---------------------------------------------------------
 ;Main init
@@ -225,8 +200,10 @@ EndFunc   ;==>attemptLoadConfigFile
 Func init()
 	affectedWindowHandleList_update()
 
-	hotkeyMode_init()
-	interruptMode_init()
+	If $hotkeyMode_enabled Then
+		HotKeySet($hotkeyMode_character, "main_callback")
+	EndIf
+
 EndFunc   ;==>init
 
 
@@ -242,7 +219,10 @@ Func main()
 
 	While 1
 		;Do nothing but sleep, infinite busy loop
-		Sleep($main_busyLoopSleep_delayMsec)
+		Sleep($interruptMode_delayMsec)
+		If $interruptMode_enabled Then
+			main_callback()
+		EndIf
 	WEnd
 EndFunc   ;==>main
 
@@ -252,6 +232,9 @@ EndFunc   ;==>main
 ;Entry point
 
 main()
+
+
+
 
 
 

@@ -7,7 +7,7 @@ Can be set to activate upon...
 
 Configurable via PeskyWindowKiller.ini located in same directory as specified:
 
-'''ini
+'''AutoIt
 [config]
 
 ;Enable or disables hotkey mode.  Kills affected windows when you press your desired character specified below.  Right now it's the lbrack '['

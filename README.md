@@ -12,16 +12,20 @@ Configurable via PeskyWindowKiller.ini located in same directory as specified:
 ```AutoIt   
 [config]   
    
-;Enable or disables hotkey mode.  Kills affected windows when you press your desired character specified below.  Right now it's the lbrack '['   
-hotkeyMode_enabled=false   
+;Enable or disables hotkey mode.   
+hotkeyMode_enabled=false  
+;Kills affected windows when you press your desired character specified below.   
+;Right now it's the lbrack '['
 hotkeyMode_character=[   
    
-;Enables or disables interrupt mode.  Kills affected windows periodically, every x number of milliseconds specified below   
+;Enables or disables interrupt mode.   
 interruptMode_enabled=true   
+;Kills affected windows periodically, every x number of milliseconds specified below  
 interruptMode_delayMsec=1000   
    
-;Enables or disables displaying a notification window when anything is killed.  Choose desired window title and message below   
+;Enables or disables displaying a notification window when anything is killed.  
 notificationWindow_enabled=false   
+;Choose desired window title and message below   
 notificationWindow_title=Notification window default title   
 notificationWindow_message=Notification window default message   
    
@@ -34,7 +38,9 @@ notificationWindow_message=Notification window default message
 ;2=firefox   
 ;3=skype   
    
-;...and all chrome, firefox, and skype windows will be closed.  Matches any text in window titles, process names, etc.  For example (this will close firefox):   
+;...and all chrome, firefox, and skype windows will be closed.   
+;Matches any text in window titles, process names, etc.    
+;For example (this will close firefox):   
    
 1=firefox   
 ```   

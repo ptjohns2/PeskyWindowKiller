@@ -6,6 +6,7 @@
 #AutoIt3Wrapper_Compile_Both=y
 #AutoIt3Wrapper_UseX64=y
 #AutoIt3Wrapper_Res_Language=1033
+#AutoIt3Wrapper_Res_requestedExecutionLevel=highestAvailable
 #AutoIt3Wrapper_Run_AU3Check=n
 #endregion ;**** Directives created by AutoIt3Wrapper_GUI ****
 
@@ -13,7 +14,6 @@
 ;---------------------------------------------------------
 ;Build option directives
 
-#NoTrayIcon
 
 
 ;---------------------------------------------------------
@@ -85,7 +85,8 @@ EndFunc   ;==>affectedWindowHandleList_hasWindows
 
 Func affectedWindowHandleList_kill()
 	For $i = 1 To $affectedWindowHandleList[0]
-		WinKill($affectedWindowHandleList[$i])
+		$pid = WinGetProcess($affectedWindowHandleList[$i])
+		$err = ProcessClose($pid)
 	Next
 EndFunc   ;==>affectedWindowHandleList_kill
 
